@@ -17,9 +17,10 @@ var http = require('http');
 /*http.createElement('div')*/
 // html string magic
 var gameNumber = 0
-var maxGameNumber = 1312
+var maxGameNumber = 1312 //82 * 16(*2)
+//'https://www.nhl.com/scores/htmlreports/20212022/ES020001.HTM'
 var htmlBase = "http://www.nhl.com"
-var htmlPath = "/scores/htmlreports/20212022/ES02"
+var htmlPath = "/scores/htmlreports/20222023/ES02"
 var htmlEnd = ".HTM"
 var htmlString = ''
 //buildHTMLString(gameNumber)
@@ -43,7 +44,8 @@ var todaysGamesJSON
 var loopCounter = 0
 var gameNumberFromGamePk
 //'https://statsapi.web.nhl.com/api/v1/game/2021020382/feed/live?site=en_nhl'
-var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202102'
+//'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
+var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202202'
 var NHLAPI_game_end = '/feed/live?site=en_nhl'
 var NHLAPI_game_URL
 //'Reports/HockeyReports/GameReports/Game0001.txt'
@@ -103,7 +105,7 @@ function writeGameSummaryToFile(gameLibrary, fileToUse) {
 }
 
 function getGameNumberFromGamePk(gamePk) {
-    gameNum = gamePk - 2021020000
+    gameNum = gamePk - 2022020000
     return gameNum
 }
 
