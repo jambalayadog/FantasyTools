@@ -36,7 +36,10 @@ block content
     - var teamRecords = JSON.parse({teamstats_data}['teamstats_data'])
     //- console.log('team4: ', JSON.parse({teamstats_data}['teamstats_data']))
     //- console.log('team5: ', teamRecords)
-    h1.header NHL 2022-2023 - Team Games by Week
+    div.header
+        div.titletext NHL 2022-2023
+        div.changetoolbutton Team Games by week
+        div.toggleviewbutton Toggle View
     //-var teamlist = JSON.parse(JSON.stringify({teams}))
     div
         div.wrapper
@@ -56,13 +59,13 @@ block content
                                 - if (week == current_week) {
                                     th.highlight(id="highlighted_column", class="week" + week, data-column="week" + week)
                                         div.datecontainer(data-column="week" + week)
-                                            div.datetext=new Date(search_date.setDate(search_date.getDate() + 1)).toDateString()
                                             div(id='week'+week)=`Week: ${week}`
+                                            div.datetext=new Date(search_date.setDate(search_date.getDate() + 1)).toDateString()
                                 - } else {
                                     th(class="week" + week, data-column="week" + week)
                                         div.datecontainer(data-column="week" + week)
-                                            div.datetext=new Date(search_date.setDate(search_date.getDate() + 1)).toDateString()
                                             div(id='week'+week)=`Week: ${week}`
+                                            div.datetext=new Date(search_date.setDate(search_date.getDate() + 1)).toDateString()
                                 - }
                             - }
                             - day += 1
@@ -82,7 +85,7 @@ block content
                                 td.team
                                     div.teamInfo
                                         div.teamID
-                                            div=team  
+                                            div.teamtitle=team  
                                             img(src=`images/` + image_name) 
                                         div.teamStatus
                                             div.teamGoals
@@ -193,13 +196,14 @@ block content
         //console.log('current week: ', current_week)
         //var next_week_id = 'week' + 6
         //console.log('next week id: ', next_week_id)
-        var curr_elem = document.getElementById('highlighted_column').firstChild.lastChild
-        var elem_id_string = (curr_elem.id).substring(4)
+        /*var curr_elem = document.getElementById('highlighted_column').firstChild.lastChild*/
+        var curr_elem = document.getElementById('highlighted_column')
+        //var elem_id_string = (curr_elem('data-columm')).substring(4)
+        var elem_id_string = (curr_elem.getAttribute('data-column')).substring(4)
         var next_week_int = parseInt(elem_id_string) + 1
-        //console.log(next_week_int)
         var elem = document.getElementById('week'+next_week_int)
 
-        var rect = elem.getBoundingClientRect();
+        //var rect = elem.getBoundingClientRect();
         //console.log(`element = : ${elem}`)
         //console.log(rect.top, rect.right, rect.bottom, rect.left);
         //elem.scrollIntoView(true, {block: "end"})
@@ -250,14 +254,14 @@ block content
                 previousColumn = column
             })
         }
-        /*
+        
         var table_elem = document.getElementById('schedule')
         var table_rect = table_elem.getBoundingClientRect();
         table_elem.scrollLeft = table_rect.left
         table_elem.scrollTop = table_rect.top
         let pos = { top: 0, left: 0, x: 0, y: 0 };
         const mouseDownHandler = function (e) {
-            console.log('MOUSE DOWN')
+            //console.log('MOUSE DOWN')
             // Change the cursor and prevent user from selecting the text
             //table_elem.style.cursor = 'grabbing';
             table_elem.style.userSelect = 'none';
@@ -269,7 +273,7 @@ block content
                 x: e.clientX,
                 y: e.clientY,
             };
-            console.log(pos)
+            //console.log(pos)
 
             document.addEventListener('mousemove', mouseMoveHandler);
             document.addEventListener('mouseup', mouseUpHandler);
@@ -287,7 +291,7 @@ block content
             window.scrollLeft = pos.left - dx;
         };
         const mouseUpHandler = function () {
-            console.log('MOUSE UP')
+            //console.log('MOUSE UP')
             document.removeEventListener('mousemove', mouseMoveHandler);
             document.removeEventListener('mouseup', mouseUpHandler);
 
@@ -295,5 +299,5 @@ block content
             table_elem.style.removeProperty('user-select');
         };
         document.addEventListener('mousedown', mouseDownHandler)
-        */
+        
 
