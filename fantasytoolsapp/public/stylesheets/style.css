@@ -9,6 +9,8 @@ body {
     /*height: 100vh;
     overflow-y:scroll;*/
     height: auto;
+    min-width: 100%;
+    width: 100%;
 }
 
 * {
@@ -64,7 +66,7 @@ h1 {
 .wrapper {
     position: relative;
     top: 80px;
-    
+    width: inherit;
 }
 
 table {
@@ -72,7 +74,7 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     align-content: center;
-    table-layout: fixed;
+    /*table-layout: fixed;*/
     /*width:fit-content;*/
     /*display: block;*/
     height: fit-content;
@@ -117,6 +119,7 @@ thead th {
         border-bottom: 7px solid #1a5276;
         text-align: center;
         min-width: 675px;
+        /*min-width: 40vw;*/
         /*min-width: 10vw;*/
         border-collapse: collapse;
     }
@@ -141,6 +144,7 @@ thead th {
         align-content: center;
         align-items: center;
         min-width: 300px;
+        /*min-width: 20vw;*/
         position: -webkit-sticky;
         position: sticky;
         left: 0;
