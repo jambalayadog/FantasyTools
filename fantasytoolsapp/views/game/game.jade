@@ -1,0 +1,16 @@
+block extra_style_sheet
+    link(rel='stylesheet', href='/stylesheets/game.css')
+
+
+
+block content
+    html
+    head
+        title= title
+    body
+        h1= message
+        div(id='counter')
+        div(id='time_left')
+        div.button_container(id='player_buttons')
+        script(src='/javascripts/game/game_functions.js')
+        

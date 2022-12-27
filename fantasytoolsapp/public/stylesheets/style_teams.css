@@ -1,0 +1,304 @@
+:root {
+    --border_color: black;
+    --white: #ffffff;
+    --border_thickness: 3px;
+  }
+
+
+html {
+    /*height: auto;*/
+}
+
+body {
+    /*padding: 20px;*/
+    font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: #22303c;
+    /*height: 100vh;
+    overflow-y:scroll;*/
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    color: white;
+}
+
+a {
+    color: #00B7FF;
+}
+
+h1 {
+    color: white;
+    background-color: #22303c;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    height: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: white;
+    background-color: #22303c;
+    font-size: 30px;
+}
+
+
+
+@media screen and (orientation:portrait) and (max-width: 1024px) {
+    .toggleviewbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 45%;
+        text-align: center;
+        font-size: 30px;
+        color: #22303c;
+    }
+    .titletext {
+        width: 45%;
+        text-align: center;
+        font-size: 30px;
+    }
+    
+    .changetoolbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 45vw;
+        text-align: center;
+        font-size: 30px;
+    }
+}
+
+@media screen and (orientation:portrait) and (min-width: 1024px) {
+    .toggleviewbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+        font-size: 30px;
+        color: #22303c;
+    }
+    .titletext {
+        width: 25vw;
+        text-align: center;
+    }
+    
+    .changetoolbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+    }
+    
+}
+
+@media screen and (orientation:landscape) {
+    .toggleviewbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+        font-size: 30px;
+        color: #22303c;
+    }
+    .titletext {
+        width: 25vw;
+        text-align: center;
+    }
+    
+    .changetoolbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+    }
+    
+}
+
+.wrapper {
+    position: relative;
+    top: 80px;
+    /*width: inherit;*/
+}
+
+
+
+
+.flexcontainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.section {
+    width: 800px;
+}
+
+.teamoverview {
+    display: flex;
+    flex-direction: column;
+}
+
+.teamtitle {}
+.teamrecord {}
+.last10results {}
+.last10player {}
+.lastgame {}
+.nextweek {}
+.next4weeks {}
+
+
+
+
+
+
+
+
+
+
+
+
+#ANA {
+    background-color: #f95500;
+}
+#ARI {
+    /*background-color: #e5d8bf;*/
+    background-color: #8e0028;
+    color: oldlace;
+}
+#BOS {
+    background-color: #fdb41f;
+}
+#BUF {
+    background-color: #003087;
+    color: #e0a422;
+}
+#CGY {
+    background-color: #c8102e;
+    color: oldlace;
+    /*color: #f6b240*/
+}
+#CAR {
+    /*background-color: #e03a3e;*/
+    background-color: #e03a3e;
+    /*#c8102e*/
+    color: oldlace;
+}
+#CHI {
+    background-color: #d3010d;
+    color: oldlace;
+}
+#COL {
+    background-color: #6f263d;
+    color: oldlace;
+}
+#CBJ {
+    background-color: #00285c;
+    color: oldlace;
+}
+#DAL {
+    background-color: #006a4e;
+    color: oldlace;
+}
+#DET {
+    background-color: #c8102b;
+    color: #f7f7f7;
+}
+#EDM {
+    background-color: #003777;
+    color: #f0631d;
+}
+#FLA {
+    background-color: #c4243e;
+    color: oldlace;
+}
+#LAK {
+    /*background-color: #919597;*/
+    background-color: #a3abae;
+    color: #1a1a1b;
+}
+#MIN {
+    background-color: #025736;
+    color: oldlace;
+}
+#MTL {
+    background-color: #bf2f38;
+    color: oldlace;
+}
+#NSH {
+    /*background-color: #041342;*/
+    background-color: #ffb81c;
+    color: #041342;
+    /*color: #ffb81c;*/
+}
+#NJD {
+    background-color: #c2102d;
+    color: oldlace;
+    /*color: #1b1b1b;*/
+}
+#NYI {
+    background-color: #002f83;
+    color: #f44a01;
+}
+#NYR {
+    background-color: #0038a9;
+    color: oldlace;
+    /*color: #ce1127*/
+}
+#OTT {
+    background-color: #da1a32;
+    color: #000000;
+}
+#PHI {
+    background-color: #eb410e;
+    color: oldlace;
+}
+#PIT {
+    background-color: #ffb81c;
+    color: #010101;
+}
+#SJS {
+    background-color: #00788a;
+    color: oldlace;
+}
+#SEA {
+    background-color: #95d7d7;
+    /*color: oldlace;*/
+    color: #001429;
+}
+#STL {
+    background-color: #002f87;
+    color: #fdba31;
+}
+#TBL {
+    background-color: #002765;
+    /*background-color: #00205b;*/
+    color: oldlace;
+}
+#TOR {
+    /*background-color: #00488e;*/
+    background-color: #013e7d;
+    color: oldlace;
+}
+#VAN {
+    /*background-color: #027f3d;*/
+    background-color: #01663f;
+    color: oldlace;
+}
+#VGK {
+    background-color: #d2b760;
+    color: #000000;
+}
+#WSH {
+    background-color: #cf132b;
+    color: oldlace;
+}
+#WPG {
+    background-color: #041e42;
+    color: oldlace;
+}

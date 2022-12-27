@@ -48,23 +48,73 @@ h1 {
     font-size: 30px;
 }
 
-.titletext {
-    width: 25vw;
-    text-align: center;
+
+
+@media screen and (orientation:portrait) and (max-width: 1024px) {
+    .toggleviewbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 33%;
+        text-align: center;
+        font-size: 45px;
+    }
+    .titletext {
+        width: 33%;
+        text-align: center;
+        font-size: 45px;
+    }
+    
+    .changetoolbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 33%;
+        text-align: center;
+        font-size: 45px;
+    }
 }
 
-.changetoolbutton {
-    border: 2px solid white;
-    border-radius: 10px;
-    width: 25vw;
-    text-align: center;
+@media screen and (orientation:portrait) and (min-width: 1024px) {
+    .toggleviewbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+        font-size: 30px;
+    }
+    .titletext {
+        width: 25vw;
+        text-align: center;
+    }
+    
+    .changetoolbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+    }
+    
 }
 
-.toggleviewbutton {
-    border: 2px solid white;
-    border-radius: 10px;
-    width: 25vw;
-    text-align: center;
+@media screen and (orientation:landscape) {
+    .toggleviewbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+        font-size: 30px;
+    }
+    .titletext {
+        width: 25vw;
+        text-align: center;
+    }
+    
+    .changetoolbutton {
+        border: 2px solid white;
+        border-radius: 10px;
+        width: 25vw;
+        text-align: center;
+    }
+    
 }
 
 .wrapper {

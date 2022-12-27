@@ -47,6 +47,15 @@ function buildGameSummaryLibrary(gameSummaryData) {
     parsedJsonData = typeof(gameSummaryData) === 'string' ? JSON.parse(gameSummaryData) : gameSummaryData
     const summaryDate = new Date().toISOString().substring(0,19) + 'Z'
     const [empty_netters, powerplay_goalsfor, powerplay_goalsagainst] = process_gameevents(parsedJsonData)
+    const parsedShort = parsedJsonData.liveData.boxscore.teams
+    // vars because some values might be blank (NHL.com API problem)
+    // I could add more checks here to ensure data is adequate
+    // and report errors back about this - ASK PROGRAMMER BUDDY
+    const home_power_plays = parsedShort.home.teamStats.teamSkaterStats != undefined ? parsedShort.home.teamStats.teamSkaterStats.powerPlayOpportunities : 0
+    const away_power_plays = parsedShort.away.teamStats.teamSkaterStats != undefined ? parsedShort.away.teamStats.teamSkaterStats.powerPlayOpportunities : 0
+    const home_power_play_goals = parsedShort.home.teamStats.teamSkaterStats != undefined ? parsedShort.home.teamStats.teamSkaterStats.powerPlayGoals : 0
+    const away_power_play_goals = parsedShort.away.teamStats.teamSkaterStats != undefined ? parsedShort.away.teamStats.teamSkaterStats.powerPlayGoals : 0
+    // make the object
     const gameSummaryObject = {
         gameSummaryDate: parsedJsonData.gameData.datetime.dateTime,
         gameSummaryGameNumber: getGameNumberFromGamePk(parsedJsonData.gamePk),
@@ -61,10 +70,14 @@ function buildGameSummaryLibrary(gameSummaryData) {
         gameSummaryAwayScore: parsedJsonData.liveData.linescore.teams.away.goals,
         gameSummaryHomeShots: parsedJsonData.liveData.linescore.teams.home.shotsOnGoal,
         gameSummaryAwayShots: parsedJsonData.liveData.linescore.teams.away.shotsOnGoal,
-        gameSummaryHomePowerPlays: parsedJsonData.liveData.boxscore.teams.home.teamStats.teamSkaterStats.powerPlayOpportunities,
+        /*gameSummaryHomePowerPlays: parsedJsonData.liveData.boxscore.teams.home.teamStats.teamSkaterStats.powerPlayOpportunities,
         gameSummaryAwayPowerPlays: parsedJsonData.liveData.boxscore.teams.away.teamStats.teamSkaterStats.powerPlayOpportunities,
         gameSummaryHomePowerPlayGoals: parsedJsonData.liveData.boxscore.teams.home.teamStats.teamSkaterStats.powerPlayGoals,
-        gameSummaryAwayPowerPlayGoals: parsedJsonData.liveData.boxscore.teams.away.teamStats.teamSkaterStats.powerPlayGoals,
+        gameSummaryAwayPowerPlayGoals: parsedJsonData.liveData.boxscore.teams.away.teamStats.teamSkaterStats.powerPlayGoals,*/
+        gameSummaryHomePowerPlays: home_power_plays,
+        gameSummaryAwayPowerPlays: away_power_plays,
+        gameSummaryHomePowerPlayGoals: home_power_play_goals,
+        gameSummaryAwayPowerPlayGoals: away_power_play_goals,
         gameSummaryAPILink: parsedJsonData.link,
         gameSummaryNHLStatsPage: buildHTMLString(getGameNumberFromGamePk(parsedJsonData.gamePk)),
         gameSummaryStatus: parsedJsonData.gameData.status.detailedState,

@@ -1,0 +1,171 @@
+extends layout
+
+block extra_style_sheet
+    link(rel='stylesheet', href='/stylesheets/style_teams.css')
+    //meta(name='viewport', content='width=device-width initial-scale=1')
+    meta(name='viewport', content='width=device-width')
+
+block content
+    - var search_date = new Date(season_start_date)
+    - var season_start_date = new Date("2022-10-01")
+    - var season_end_date = new Date("2023-04-16")  //2023-04-16
+    - var first_monday_date = new Date("2022-10-03")
+    - var todays_date = new Date()
+    - var teams = 32
+    - var ms_in_a_day = 86400000
+    - var days = (season_end_date - season_start_date) / ms_in_a_day
+    - var games_per_week = 0
+    - var scroll_week
+    - var first_monday = new Date("2022-10-03")
+    - var day_offset = 0
+    - var matchup_length = 1 //week
+    - var current_week = Math.trunc((todays_date - first_monday) / (7 * ms_in_a_day))
+    - var total_weeks = 0
+    - console.log(`current week: ${current_week}`)
+    - console.log('days: ', days)
+    - var teamlist = {schedule_data}
+    //- console.log('hey', {schedule_data},  typeof({schedule_data}))
+    - var teamdata = {teamstats_data}
+    //- console.log(teamdata)
+    - for (team in {teamstats_data}) {
+        //- console.log('undefined: ', ({teamstats_data}[team]))
+        //- console.log('team: ', team)
+        //- console.log('team2: ', ({teamstats_data}[team]).substring(0,80))
+        - //get via team abbreviation the team's win-loss-ot record, as well as GF and GA
+        - for (const [teamAbbr, teamStats] of Object.entries(JSON.parse({teamstats_data}[team]))) {
+            //- console.log(teamAbbr, teamStats)
+        - }
+    - }
+    //- console.log('team3: ', ({teamstats_data}['teamstats_data']).substring(0,90))
+    - var teamRecords = JSON.parse({teamstats_data}['teamstats_data'])
+    //- console.log('team4: ', JSON.parse({teamstats_data}['teamstats_data']))
+    //- console.log('team5: ', teamRecords)
+    div.header
+        div.titletext NHL 2022-2023
+        select.toggleviewbutton(onChange="location = this.value")
+            option.togglevalue(value=`/teams`)='Team Overviews'
+            option.togglevalue(value=`/schedule`)='NHL Weekly Schedules'
+            option.togglevalue(value=`/players`)='Players'
+    //-var teamlist = JSON.parse(JSON.stringify({teams}))
+    .wrapper
+        .flexcontainer
+            .teamoverview.section
+                .teamtitle Team Title
+                    .teamname team button
+                    .teamlogo teamlogo
+                .teamrecord Team Record
+            .last10results.section Last 10 Results
+            .last10player.section Last 10 Player Stats
+            .lastgame.section Last Game Summary
+            .nextweek.section Next Week
+            .next4weeks.section Next 4 Weeks
+    script.
+        //console.log('document: ', document.URL)
+        //console.log('current week: ', current_week)
+        //var next_week_id = 'week' + 6
+        //console.log('next week id: ', next_week_id)
+        /*var curr_elem = document.getElementById('highlighted_column').firstChild.lastChild*/
+        var curr_elem = document.getElementById('highlighted_column')
+        //var elem_id_string = (curr_elem('data-columm')).substring(4)
+        var elem_id_string = (curr_elem.getAttribute('data-column')).substring(4)
+        var next_week_int = parseInt(elem_id_string) + 1
+        var elem = document.getElementById('week'+next_week_int)
+
+        //var rect = elem.getBoundingClientRect();
+        //console.log(`element = : ${elem}`)
+        //console.log(rect.top, rect.right, rect.bottom, rect.left);
+        //elem.scrollIntoView(true, {block: "end"})
+        //window.scroll(rect.top, rect.left)
+        /*setTimeout(function () {
+            window.scrollTo(rect.top, rect.left);
+        },2);*/
+        //document.addEventListener('DOMContentLoaded', (event) => {
+        window.addEventListener('load', (event) => {
+            //console.log('DOMContentLoaded');
+            setTimeout(function () {
+                //window.scrollTo(rect.top, rect.left+1000);
+                //window.scrollTo(0, rect.left+1000);
+                elem.scrollIntoView()
+                //console.log("view scrolled")
+                
+            },100);
+        });
+        
+        // headerclicked function
+        const headerClicked = function (e) {
+            console.log("Mouse clicked", e)
+        }
+        // add event listeners to each table header
+        var click_listeners = document.getElementsByClassName('datecontainer')
+        var previousColumn 
+        for (var i=0; i < click_listeners.length; i++) {
+            //console.log('click_listener: ', click_listeners[i])
+            click_listeners[i].addEventListener('click', function(e) {
+                //console.log("Mouse clicked", e, this)
+                var column = this.getAttribute('data-column')
+                if (column != previousColumn) {
+                    var t = document.getElementById("schedule")
+                    var d = t.getElementsByTagName("td")
+                    for (var j=0; j < d.length; j++) {
+                        d[j].classList.remove('extrahighlight')
+                    }
+                    var h = document.querySelectorAll('td[data-column='+column+']')
+                    for (var j=0; j < h.length; j++) {
+                        h[j].classList.add('extrahighlight')
+                    }
+                } else {
+                    var h = document.querySelectorAll('td[data-column='+column+']')
+                    for (var j=0; j < h.length; j++) {
+                        h[j].classList.toggle('extrahighlight')
+                    }
+                }
+                previousColumn = column
+            })
+        }
+        
+        var table_elem = document.getElementById('schedule')
+        var table_rect = table_elem.getBoundingClientRect();
+        table_elem.scrollLeft = table_rect.left
+        table_elem.scrollTop = table_rect.top
+        let pos = { top: 0, left: 0, x: 0, y: 0 };
+        const mouseDownHandler = function (e) {
+            //console.log('MOUSE DOWN')
+            // Change the cursor and prevent user from selecting the text
+            //table_elem.style.cursor = 'grabbing';
+            table_elem.style.userSelect = 'none';
+            pos = {
+                // The current scroll
+                left: table_elem.scrollLeft,
+                top: table_elem.scrollTop,
+                // Get the current mouse position
+                x: e.clientX,
+                y: e.clientY,
+            };
+            //console.log(pos)
+
+            document.addEventListener('mousemove', mouseMoveHandler);
+            document.addEventListener('mouseup', mouseUpHandler);
+        };
+        const mouseMoveHandler = function (e) {
+            //console.log('MOUSE MOVE')
+            // How far the mouse has been moved
+            const dx = e.clientX - pos.x;
+            const dy = e.clientY - pos.y;
+            console.log(dx, dy)
+
+            // Scroll the element
+            table_elem.scrollTop = pos.top - dy;
+            table_elem.scrollLeft = pos.left - dx;
+            window.scrollLeft = pos.left - dx;
+        };
+        const mouseUpHandler = function () {
+            //console.log('MOUSE UP')
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+
+            //table_elem.style.cursor = 'grab';
+            table_elem.style.removeProperty('user-select');
+        };
+        document.addEventListener('mousedown', mouseDownHandler)
+        
+

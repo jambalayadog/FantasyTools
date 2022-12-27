@@ -1,0 +1,489 @@
+html {
+    height: auto;
+}
+
+body {
+    /*padding: 20px;*/
+    font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: #22303c;
+    /*height: 100vh;
+    overflow-y:scroll;*/
+    height: auto;
+    min-width: 100%;
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+a {
+    color: #00B7FF;
+}
+
+h1 {
+    color: white;
+    background-color: #22303c;
+}
+
+.button_container {
+    display: flex;
+}
+
+.button {
+    border: 2px solid white;
+}
+
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    height: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: white;
+    background-color: #22303c;
+    font-size: 30px;
+}
+
+.titletext {
+    width: 25vw;
+    text-align: center;
+}
+
+.changetoolbutton {
+    border: 2px solid white;
+    border-radius: 10px;
+    width: 25vw;
+    text-align: center;
+}
+
+.toggleviewbutton {
+    border: 2px solid white;
+    border-radius: 10px;
+    width: 25vw;
+    text-align: center;
+}
+
+.wrapper {
+    position: relative;
+    top: 80px;
+    width: inherit;
+}
+
+table {
+    /*width: 100%;*/
+    border-collapse: separate;
+    border-spacing: 0;
+    align-content: center;
+    /*table-layout: fixed;*/
+    /*width:fit-content;*/
+    /*display: block;*/
+    height: fit-content;
+    top: 80px;
+}
+
+tr:nth-of-type(even) {
+    background-color:gainsboro;
+}
+
+tr:nth-of-type(odd) {
+    background-color:silver;
+}
+
+.team:nth-of-type(even) { 
+    background-color:#777;
+}
+
+.team:nth-of-type(odd) { 
+    background-color: whitesmoke;
+}
+
+thead th {
+    height: 80px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 80px;
+    /*background-color: grey;*/
+    background-color: whitesmoke; 
+    color: #080219;
+    /*color: white;*/
+    font-size: 32px;
+    border-right: 5px solid #1a5276;
+    border-bottom: 5px solid #1a5276;
+    z-index: 2; 
+}
+
+@media only screen and (max-width: 1024px) {
+    td {
+        /*height: 80px;*/
+        border-right: 7px solid #1a5276;
+        border-bottom: 7px solid #1a5276;
+        text-align: center;
+        min-width: 675px;
+        /*min-width: 40vw;*/
+        /*min-width: 10vw;*/
+        border-collapse: collapse;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    td {
+        /*height: 80px;*/
+        border-right: 7px solid #1a5276;
+        border-bottom: 7px solid #1a5276;
+        text-align: center;
+        min-width: 400px;
+        /*min-width: 10vw;*/
+        border-collapse: collapse;
+    }
+}
+
+
+@media only screen and (max-width: 1024px) {
+    td.team {
+        font-weight: bold;
+        align-content: center;
+        align-items: center;
+        min-width: 300px;
+        /*min-width: 20vw;*/
+        position: -webkit-sticky;
+        position: sticky;
+        left: 0;
+        top: 30px;
+        height: 150px;
+        /*background-color: grey;*/
+        background-color: whitesmoke; 
+        color: #080219;
+        /*color: white;*/
+        font-size: 32px;
+        border-right: 7px solid #1a5276;
+        border-bottom: 7px solid #1a5276; 
+        z-index: 1;   
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    td.team {
+        font-weight: bold;
+        align-content: center;
+        align-items: center;
+        min-width: 150px;
+        position: -webkit-sticky;
+        position: sticky;
+        left: 0;
+        top: 30px;
+        /*background-color: grey;*/
+        background-color: whitesmoke; 
+        color: #080219;
+        /*color: white;*/
+        font-size: 40px;
+        border-right: 7px solid #1a5276;
+        border-bottom: 7px solid #1a5276; 
+        z-index: 1;   
+    }
+}
+
+.weekcontainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.weeksummarycontainer {
+    display: flex;
+    flex-direction: row;
+    height: 60%;
+}
+
+
+
+.mini {
+    height: 100%;
+    min-height: 60px;
+    width: 100%;
+    position: relative;
+}
+
+
+.manygames {
+    background-color: #f76868;
+}
+
+.threegames {
+    background-color: #7732a4;
+}
+
+.twogames {
+    background-color: #016fa0;
+}
+
+.onegame {
+    background-color: #f7a801;
+}
+
+.nogames {
+    background-color: #02a9b0;
+}
+
+
+
+
+
+.extrahighlight {
+    background-color: #cc9999;
+    border-left: 6px solid crimson;
+    border-right: 8px solid crimson;
+    box-sizing: border-box;
+}
+
+.highlight {
+    /*background-color: #ff003380;*/
+    /*background-color: #ffff7740;*/
+    background-color: #99cc99;
+    border-left: 6px solid forestgreen;
+    border-right: 8px solid forestgreen;
+}
+
+th.highlight {
+    border-left: 6px solid forestgreen;
+    border-right: 8px solid forestgreen;
+    background-color: palegreen;
+}
+
+.spacer {
+    height: 100px;
+}
+
+.teamlogo {
+    height: 60px;
+    width: 60px;
+}
+
+
+
+@media only screen and (max-width: 1024px) {
+    img.opponentmini {
+        height: 75px;
+        width: 75px;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    img.opponentmini {
+        height: 55px;
+        width: 55px;
+    }
+}
+
+img {
+    height: 60px;
+    width: 60px;
+    vertical-align: middle;
+}
+
+.gameplayed {
+    background-color: aqua;
+}
+
+.homegame {
+    background-color: #0092a1;
+}
+
+.awaygame {
+    background-color: #eee;
+}
+
+.minicontainer {
+    /*display: flex;
+    flex-direction: column;*/
+    width: calc(100%/7);
+    /*height: 100%;*/
+    border-top: 1px solid #1a5276;
+}
+
+.minicontainer:nth-of-type(odd) {
+    border-right: 1px solid #1a5276;
+    border-left: 1px solid #1a5276;
+}
+
+.minicontainer:nth-child(1) {
+    border-left: none;
+}
+
+.minicontainer:nth-child(7) {
+    border-right: none;
+}
+
+@media only screen and (max-width: 1024px) {
+    .miniscore {
+        font-size: 30px;
+        font-weight: bold;
+        position: absolute;
+        width: 100%;
+        top: 60%;
+        color: #080219;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .miniscore {
+        font-size: 19px;
+        font-weight: bold;
+        position: absolute;
+        width: 100%;
+        top: 39px;
+        color: #080219;
+    }
+}
+
+.miniwin {
+    background-color: lightgreen;
+}
+
+.miniloss {
+    background-color: lightcoral;
+}
+
+.minitie {
+    background-color: darkgray;
+}
+
+
+.datecontainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+
+
+@media only screen and (max-width: 1024px) {
+    .datetext {
+        font-size: 30px;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .datetext {
+        font-size: 22px;
+    }
+}
+
+.gamescontainer {
+    display: flex;
+    justify-content: center;
+    height: 40%;
+    align-items: center;
+}
+
+.games_number {
+    vertical-align: middle;
+    width: calc(2px + (500%/7));
+    font-size: 40px;
+    height: 100%;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+.weekgoals {
+    display: flex;
+    /*flex-direction: column;*/
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    /*padding-right: 40px;*/
+    color: white;
+}
+
+@media only screen and (max-width: 1024px) {
+    .goalsfor {
+        font-size: 30px;
+        vertical-align: middle;
+        padding-right: 10px;
+    }
+
+    .goalsagainst {
+        font-size: 30px;
+        vertical-align: middle;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .goalsfor {
+        font-size: 22px;
+        vertical-align: middle;
+        padding-right: 10px;
+    }
+
+    .goalsagainst {
+        font-size: 22px;
+        vertical-align: middle;
+    }
+}
+
+.teamID {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+@media only screen and (max-width: 1024px) {
+    .teamtitle{
+        font-size: 40px;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .teamtitle{
+
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .teamStatus {
+        display: flex;
+        flex-direction: column;
+        /*font-size: 18px;*/
+        font-size: 100%;
+        font-weight: bold;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .teamStatus {
+        display: flex;
+        flex-direction: column;
+        /*font-size: 18px;*/
+        font-size: 45%;
+        font-weight: bold;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+}
+
+.teamGoals {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.teamInfo {
+    height: 100%;
+}

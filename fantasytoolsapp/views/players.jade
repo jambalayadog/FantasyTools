@@ -1,0 +1,307 @@
+extends layout
+
+block extra_style_sheet
+    link(rel='stylesheet', href='/stylesheets/style_schedule2.css')
+    //meta(name='viewport', content='width=device-width initial-scale=1')
+    meta(name='viewport', content='width=device-width')
+
+block content
+    - var search_date = new Date(season_start_date)
+    - var season_start_date = new Date("2022-10-01")
+    - var season_end_date = new Date("2023-04-16")  //2023-04-16
+    - var first_monday_date = new Date("2022-10-03")
+    - var todays_date = new Date()
+    - var teams = 32
+    - var ms_in_a_day = 86400000
+    - var days = (season_end_date - season_start_date) / ms_in_a_day
+    - var games_per_week = 0
+    - var scroll_week
+    - var first_monday = new Date("2022-10-03")
+    - var day_offset = 0
+    - var matchup_length = 1 //week
+    - var current_week = Math.trunc((todays_date - first_monday) / (7 * ms_in_a_day))
+    - var total_weeks = 0
+    - console.log(`current week: ${current_week}`)
+    - console.log('days: ', days)
+    - var teamlist = {schedule_data}
+    //- console.log('hey', {schedule_data},  typeof({schedule_data}))
+    - var teamdata = {teamstats_data}
+    //- console.log(teamdata)
+    - for (team in {teamstats_data}) {
+        //- console.log('undefined: ', ({teamstats_data}[team]))
+        //- console.log('team: ', team)
+        //- console.log('team2: ', ({teamstats_data}[team]).substring(0,80))
+        - //get via team abbreviation the team's win-loss-ot record, as well as GF and GA
+        - for (const [teamAbbr, teamStats] of Object.entries(JSON.parse({teamstats_data}[team]))) {
+            //- console.log(teamAbbr, teamStats)
+        - }
+    - }
+    //- console.log('team3: ', ({teamstats_data}['teamstats_data']).substring(0,90))
+    - var teamRecords = JSON.parse({teamstats_data}['teamstats_data'])
+    //- console.log('team4: ', JSON.parse({teamstats_data}['teamstats_data']))
+    //- console.log('team5: ', teamRecords)
+    div.header
+        div.titletext NHL 2022-2023
+        select.toggleviewbutton(onChange="location = this.value")
+            option.togglevalue(value=`/players`)='Players'
+            option.togglevalue(value=`/schedule`)='NHL Weekly Schedules'
+            option.togglevalue(value=`/teams`)='Teams'
+    //-var teamlist = JSON.parse(JSON.stringify({teams}))
+    div.wrapper
+        table(id='schedule')
+            thead
+                tr
+                    th 
+                    - var week = 0
+                    - var day = 0
+                    while day <= days - 2
+                        - var search_date = new Date(first_monday)
+                        //- console.log(`${day} - first_date: ${search_date}`)
+                        - search_date.setDate(search_date.getDate() + day)
+                        //- console.log(`-search_date: ${search_date}`)
+                        - if (day % 7 == 0) {
+                            //- console.log(`-${day} --new week header: ${search_date}`)
+                            - if (week == current_week) {
+                                th.highlight(id="highlighted_column", class="week" + week, data-column="week" + week)
+                                    div.datecontainer(data-column="week" + week)
+                                        div(id='week'+week)=`Week: ${week}`
+                                        div.datetext=new Date(search_date.setDate(search_date.getDate() + 1)).toDateString()
+                            - } else {
+                                th(class="week" + week, data-column="week" + week)
+                                    div.datecontainer(data-column="week" + week)
+                                        div(id='week'+week)=`Week: ${week}`
+                                        div.datetext=new Date(search_date.setDate(search_date.getDate() + 1)).toDateString()
+                            - }
+                        - }
+                        - day += 1
+                        - week = Math.trunc((day) / 7)
+                        - total_weeks = week
+            tbody 
+                //each val, key in JSON.parse(JSON.stringify({schedule_data}))
+                //each teamleague in JSON.parse(JSON.stringify({schedule_data}))
+                - var teams = 0
+                - for (teamSchedule in JSON.parse(JSON.stringify({schedule_data}))) {
+                    - console.log(({schedule_data}[teamSchedule]).substring(0,50))
+                    - for (const [team, gameSchedule] of Object.entries(JSON.parse({schedule_data}[teamSchedule]))) {
+                        //- console.log(key, gameSchedule)
+                        //- if (team == "ANA") {
+                        - var image_name = team + '.png'
+                        tr 
+                            td.team
+                                div.teamInfo
+                                    div.teamID(id=team)
+                                        div.teamtitle=team  
+                                        img(src=`images/` + image_name) 
+                                    div.teamStatus
+                                        div.teamGoals
+                                            - var gamesplayed_string = 'GP: ' + teamRecords[team].teamRecord_GamesPlayed
+                                            div=gamesplayed_string
+                                            - var record_string = teamRecords[team].teamRecord_Wins + '-' + teamRecords[team].teamRecord_Losses + '-' + teamRecords[team].teamRecord_Overtimes
+                                            div='(' + record_string + ')'
+                                        //- console.log('team record: ', teamRecords[team].teamRecord_Wins)
+                                        div.teamGoals
+                                            div='GF: ' + teamRecords[team].teamRecord_GoalsFor
+                                            div='GA: ' + teamRecords[team].teamRecord_GoalsAgainst
+                            - console.log(team)
+                            - teams += 1
+                            - var i = 1
+                            - var week = 0
+                            - games_per_week = 0
+                            - var weeks_games = []
+                            - var goals_for = 0
+                            - var goals_against = 0
+                            //- console.log('i: ', i, ' - days: ', days)
+                            while i <= days
+                                - week = Math.trunc(i / 7)
+                                - var search_date = new Date(first_monday)
+                                - search_date.setDate(search_date.getDate() + i)
+                                //- console.log(`day: ${i} - week: ${week} - date: ${new Date(search_date).toDateString()}`)
+                                - gamefound = false 
+                                - for (gameInfo in gameSchedule) {
+                                    //- console.log(gameInfo)
+                                    - if (gameInfo == search_date.toDateString()) {
+                                        - var hometeam = gameSchedule[gameInfo].hometeam
+                                        - var awayteam = gameSchedule[gameInfo].awayteam
+                                        - goals_for += gameSchedule[gameInfo].goalsFor
+                                        - goals_against += gameSchedule[gameInfo].goalsAgainst
+                                        - if (hometeam == team) {
+                                            //td=awayteam
+                                        - } else {
+                                            //td='@'+hometeam
+                                        - }
+                                        - gamefound = true
+                                        - games_per_week += 1
+                                        - weeks_games.push(gameSchedule[gameInfo])
+                                        //- console.log('game: ', weeks_games)
+                                        //- console.log(`gamefound: ${team} , ${games_per_week}, day: ${i} - week: ${week} - date: ${new Date(search_date).toDateString()} `)
+                                        //- console.log(gameInfo, i, gameSchedule[gameInfo].hometeam)
+                                        //- console.log({schedule_data}[teamSchedule][gameSchedule])
+                                    - }
+                                -}
+                                
+                                - if (gamefound == false) {
+                                    - weeks_games.push('')
+                                    //- console.log('no game: ', weeks_games)
+                                - }
+                                - if (i % 7 == 0) {
+                                    //- console.log(`week: ${week} - # games: ${games_per_week}`)
+                                    td(data-column="week" + (week-1), class= week == current_week + 1 ? "highlight" : "")
+                                        div.weekcontainer
+                                            div.gamescontainer
+                                                div(class= games_per_week >= 4 ? "games_number manygames" :
+                                                        games_per_week == 3 ? "games_number threegames" : 
+                                                        games_per_week == 2 ? "games_number twogames" :
+                                                        games_per_week == 1 ? "games_number onegame" : "games_number nogames" )
+                                                    div=games_per_week
+                                                    div.weekgoals
+                                                        div.goalsfor='(GF: ' + goals_for + ','
+                                                        div.goalsagainst='GA: ' + goals_against + ')'    
+                                            div.weeksummarycontainer
+                                                - for (day_of_week = 0; day_of_week < 7; day_of_week++) {
+                                                    div.minicontainer
+                                                        div.mini(class= weeks_games[day_of_week] == '' ? 'nogame' :
+                                                            weeks_games[day_of_week].hometeam == team ? 'homegame' : 'awaygame', id=weeks_games[day_of_week].hometeam == team ? team : '')
+                                                            - if (weeks_games[day_of_week] != '') {
+                                                                - var homegame = false
+                                                                - if (weeks_games[day_of_week].hometeam == team) {
+                                                                    - var opp_image_name = weeks_games[day_of_week].awayteam
+                                                                    - homegame = true
+                                                                - } else {
+                                                                    - var opp_image_name = weeks_games[day_of_week].hometeam
+                                                                - }
+                                                                img.opponentmini(src=`images/` + opp_image_name + '.png')
+                                                                div.miniscore(class= ['OT','SO'].includes(weeks_games[day_of_week].periodResult) ? 'minitie' :
+                                                                    weeks_games[day_of_week].teamResult == 'W' ? 'miniwin' : 'miniloss')
+                                                                    =(weeks_games[day_of_week].teamResult + ` ` + weeks_games[day_of_week].scoreResult)
+                                                            -}
+                                                        
+                                                - }
+                                    //- if (week == current_week) {
+                                    //    td.highlight=games_per_week
+                                    //- } else {
+                                    //    td=games_per_week
+                                    //- }
+                                    - games_per_week = 0
+                                    - weeks_games = []
+                                    - goals_for = 0
+                                    - goals_against = 0
+                                - }
+                                - i += 1
+                        //- }
+                    - }
+                -}
+                    //- console.log("key: ", key, " - val: ", {val})
+                - console.log('teams:', teams)
+    //- var element = document.getElementById('highlighted_column')
+    //- console.log(`element = : ${element}`)
+    //- element.scrollIntoView(true)
+    script.
+        //console.log('document: ', document.URL)
+        //console.log('current week: ', current_week)
+        //var next_week_id = 'week' + 6
+        //console.log('next week id: ', next_week_id)
+        /*var curr_elem = document.getElementById('highlighted_column').firstChild.lastChild*/
+        var curr_elem = document.getElementById('highlighted_column')
+        //var elem_id_string = (curr_elem('data-columm')).substring(4)
+        var elem_id_string = (curr_elem.getAttribute('data-column')).substring(4)
+        var next_week_int = parseInt(elem_id_string) + 1
+        var elem = document.getElementById('week'+next_week_int)
+
+        //var rect = elem.getBoundingClientRect();
+        //console.log(`element = : ${elem}`)
+        //console.log(rect.top, rect.right, rect.bottom, rect.left);
+        //elem.scrollIntoView(true, {block: "end"})
+        //window.scroll(rect.top, rect.left)
+        /*setTimeout(function () {
+            window.scrollTo(rect.top, rect.left);
+        },2);*/
+        //document.addEventListener('DOMContentLoaded', (event) => {
+        window.addEventListener('load', (event) => {
+            //console.log('DOMContentLoaded');
+            setTimeout(function () {
+                //window.scrollTo(rect.top, rect.left+1000);
+                //window.scrollTo(0, rect.left+1000);
+                elem.scrollIntoView()
+                //console.log("view scrolled")
+                
+            },100);
+        });
+        
+        // headerclicked function
+        const headerClicked = function (e) {
+            console.log("Mouse clicked", e)
+        }
+        // add event listeners to each table header
+        var click_listeners = document.getElementsByClassName('datecontainer')
+        var previousColumn 
+        for (var i=0; i < click_listeners.length; i++) {
+            //console.log('click_listener: ', click_listeners[i])
+            click_listeners[i].addEventListener('click', function(e) {
+                //console.log("Mouse clicked", e, this)
+                var column = this.getAttribute('data-column')
+                if (column != previousColumn) {
+                    var t = document.getElementById("schedule")
+                    var d = t.getElementsByTagName("td")
+                    for (var j=0; j < d.length; j++) {
+                        d[j].classList.remove('extrahighlight')
+                    }
+                    var h = document.querySelectorAll('td[data-column='+column+']')
+                    for (var j=0; j < h.length; j++) {
+                        h[j].classList.add('extrahighlight')
+                    }
+                } else {
+                    var h = document.querySelectorAll('td[data-column='+column+']')
+                    for (var j=0; j < h.length; j++) {
+                        h[j].classList.toggle('extrahighlight')
+                    }
+                }
+                previousColumn = column
+            })
+        }
+        
+        var table_elem = document.getElementById('schedule')
+        var table_rect = table_elem.getBoundingClientRect();
+        table_elem.scrollLeft = table_rect.left
+        table_elem.scrollTop = table_rect.top
+        let pos = { top: 0, left: 0, x: 0, y: 0 };
+        const mouseDownHandler = function (e) {
+            //console.log('MOUSE DOWN')
+            // Change the cursor and prevent user from selecting the text
+            //table_elem.style.cursor = 'grabbing';
+            table_elem.style.userSelect = 'none';
+            pos = {
+                // The current scroll
+                left: table_elem.scrollLeft,
+                top: table_elem.scrollTop,
+                // Get the current mouse position
+                x: e.clientX,
+                y: e.clientY,
+            };
+            //console.log(pos)
+
+            document.addEventListener('mousemove', mouseMoveHandler);
+            document.addEventListener('mouseup', mouseUpHandler);
+        };
+        const mouseMoveHandler = function (e) {
+            //console.log('MOUSE MOVE')
+            // How far the mouse has been moved
+            const dx = e.clientX - pos.x;
+            const dy = e.clientY - pos.y;
+            console.log(dx, dy)
+
+            // Scroll the element
+            table_elem.scrollTop = pos.top - dy;
+            table_elem.scrollLeft = pos.left - dx;
+            window.scrollLeft = pos.left - dx;
+        };
+        const mouseUpHandler = function () {
+            //console.log('MOUSE UP')
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+
+            //table_elem.style.cursor = 'grab';
+            table_elem.style.removeProperty('user-select');
+        };
+        document.addEventListener('mousedown', mouseDownHandler)
+        
+

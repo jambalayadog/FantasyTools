@@ -42,8 +42,10 @@ block content
     //- console.log('team5: ', teamRecords)
     div.header
         div.titletext NHL 2022-2023
-        div.changetoolbutton Team Games by week
-        div.toggleviewbutton Toggle View2
+        select.toggleviewbutton(onChange="location = this.value")
+            option.togglevalue(value=`/schedule2`)='NHL Weekly Schedules'
+            option.togglevalue(value=`/players`)='Players'
+            option.togglevalue(value=`/teams`)='Teams'
     //-var teamlist = JSON.parse(JSON.stringify({teams}))
     div.wrapper
         table(id='schedule')
@@ -156,7 +158,7 @@ block content
                                                         div.goalsagainst='GA: ' + goals_against + ')'    
                                             div.weeksummarycontainer
                                                 - for (day_of_week = 0; day_of_week < 7; day_of_week++) {
-                                                    div.minicontainer
+                                                    div.minicontainer(data-column=search_date.toDateString())
                                                         div.mini(class= weeks_games[day_of_week] == '' ? 'nogame' :
                                                             weeks_games[day_of_week].hometeam == team ? 'homegame' : 'awaygame', id=weeks_games[day_of_week].hometeam == team ? team : '')
                                                             - if (weeks_games[day_of_week] != '') {
