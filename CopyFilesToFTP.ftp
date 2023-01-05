@@ -1,0 +1,11 @@
+open 144.208.70.208
+fanta117
+&-forty#gL9-)p
+cd public_html
+cd fantasytoolsapp
+cd files
+binary
+put 01_NHLScheduleByTeam.json
+put 02_NHLTeamStats.json
+disconnect
+quit
