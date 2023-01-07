@@ -241,7 +241,7 @@ function sortScheduleByTeam(jsonGameSummary){
                 //console.log(`found a game for ${hometeamabbrev}, ${awayteamabbrev} on ${gameplaydate}`)
                 gameInfo.hometeam = hometeamabbrev
                 gameInfo.awayteam = awayteamabbrev
-                //gameInfo.gamedate = gameplaydate
+                gameInfo.gamedate = gameplaydate
                 gameInfo.gamenumber = jsonGameSummary[summary].gameSummaryGameNumber
                 gameInfo.result = jsonGameSummary[summary].gameSummaryDetailedState
                 gameInfo.periodResult = jsonGameSummary[summary].gameSummaryPeriod   // 1 2 3 and 4 (OT) and 5 (SO)
