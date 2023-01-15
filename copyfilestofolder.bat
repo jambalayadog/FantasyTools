@@ -15,4 +15,4 @@ call git add 03_NHLWeeklySchedules.json
 call git commit -m "stats update"
 call git push origin main
 :: call git status
-:: pause
+pause
