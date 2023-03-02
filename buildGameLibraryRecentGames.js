@@ -36,6 +36,7 @@ var filetypeJSON = '.json'
 var LIBRARY_fpath
 var libraryFile = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.txt'
 var libraryFileJSON = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.json'
+var libraryFileJSONTemp = 'Reports/HockeyReports/GameReports/00_GameSummaryLibraryTemp.json'
 ////////////////
 
 //'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2022-01-12&endDate=2022-01-12'
@@ -191,15 +192,15 @@ function buildGameFilePath(gameNum) {
 buildLibrary()
 
 async function buildLibrary() {
+    //performance timing
     const start = Date.now()
-    //var gameNumbers = []
-    //var gameNumbers_to_get
+    
+    // get relevant game numbers (within some days of today's date)
     let gameNumbers_to_get = await getGameNumbers()
     //console.log(`gameNumbers_to_get: ${gameNumbers_to_get}`)
     
+    // go through all the year's games
     for (i = 1; i <= maxGameNumber; i++) {
-    //for (i = 661; i <= 662; i++) {
-    //for (i = 716; i <= 717; i++) {
         //console.log(`index: ${i}, ${gameNumbers_to_get.indexOf(stringifyGameNumber(i))}`)
         if (gameNumbers_to_get.indexOf(stringifyGameNumber(i)) >= 0) {
             console.log(`game within a few days of today: ${i}`)
@@ -214,10 +215,38 @@ async function buildLibrary() {
         }
     }
     
+    //write library file
+    writeGameSummaryToFile(gameSummaryLibrary, libraryFileJSON)
+    var sorted_library = sortGameLibrary(gameSummaryLibrary)
+    
+    // sort gameSummaryLibrary by Date rather than GameNumber
+    //writeGameSummaryToFile(sorted_library, libraryFileJSONTemp)
+    writeGameSummaryToFile(sorted_library, libraryFileJSON)
+
+    //performance timing
     const end = Date.now()
     console.log(`Execution time: ${(end - start)/1000} s`)
-    writeGameSummaryToFile(gameSummaryLibrary, libraryFileJSON)
     
+}
+
+function sortGameLibrary(library) {
+    var new_library = []
+    new_library = library
+    //new_library.sort((x,y) => x.gameSummaryDate - y.gameSummaryDate)
+    new_library.sort(sortFunc)
+    //gameSummaryDate
+    //gameSummaryGameNumber
+    return new_library
+}
+
+function sortFunc(a, b) {
+    var a = new Date(a.gameSummaryDate)
+    var b = new Date(b.gameSummaryDate)
+    console.log('a,b: ', a, ' ', b)
+    return a > b ? 1 : b > a ? -1 : 0;
+    //console.log('2a,2b: ', new Date(a.gameSummaryDate), ' ', new Date(b.gameSummaryDate))
+    //console.log('3a,3b: ', new Date(a.gameSummaryDate) - new Date(b.gameSummaryDate))
+
 }
 
 // let todays_games = []
