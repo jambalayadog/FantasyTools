@@ -27,7 +27,7 @@ var gameNumber = 0
 var maxGameNumber = 18 //82 * 16(*2)   1312
 //'https://www.nhl.com/scores/htmlreports/20212022/ES020001.HTM'
 var htmlBase = "http://www.nhl.com"
-var htmlPath = "/scores/htmlreports/20222023/ES02"
+var htmlPath = "/scores/htmlreports/20232024/ES02"
 var htmlEnd = ".HTM"
 var htmlString = ''
 //buildHTMLString(gameNumber)
@@ -52,16 +52,16 @@ var loopCounter = 0
 var gameNumberFromGamePk
 //'https://statsapi.web.nhl.com/api/v1/game/2021020382/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
-var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202202'
+var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202302'
 var NHLAPI_game_end = '/feed/live?site=en_nhl'
 var NHLAPI_game_URL
 //'Reports/HockeyReports/GameReports/Game0001.txt'
-var filepath = 'Reports/HockeyReports/GameReports/Game'
+var filepath = 'Reports/HockeyReports_20232024/GameReports/Game'
 var filetype = '.txt'
 var filetypeJSON = '.json'
 var LIBRARY_fpath
-var libraryFile = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.txt'
-var libraryFileJSON = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.json'
+var libraryFile = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.txt'
+var libraryFileJSON = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
 ////////////////
 
 /*
@@ -208,8 +208,8 @@ getSchedule()
 
 async function getSchedule() {
     // get our game summary data
-    const gameSummaryFilePath = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.json'
-    const scheduleFilePath = 'Reports/HockeyReports/GameReports/01_NHLScheduleByTeam.json'
+    const gameSummaryFilePath = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
+    const scheduleFilePath = 'Reports/HockeyReports_20232024/GameReports/01_NHLScheduleByTeam.json'
     let gameSummary = await readGameSummaryLibraryFile(gameSummaryFilePath)
     //console.log(`data: ${gameSummary}`)
     jsonGameSummary = JSON.parse(gameSummary)

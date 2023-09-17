@@ -17,8 +17,6 @@ console.log('javascript loaded')
 //https://www.hockey-reference.com/leagues/NHL_2023_games.html
 //https://www.hockey-reference.com/leagues/NHL_2023_games.html#games
 
-//https://statsapi.web.nhl.com/api/v1/standings?hydrate=record(overall),division,conference,team(nextSchedule(team),previousSchedule(team))&season=20222023&site=en_nhl
-//https://statsapi.web.nhl.com/api/v1/standings
 var http = require('http');
 
 
@@ -29,7 +27,7 @@ var gameNumber = 0
 var maxGameNumber = 18 //82 * 16(*2)   1312
 //'https://www.nhl.com/scores/htmlreports/20212022/ES020001.HTM'
 var htmlBase = "http://www.nhl.com"
-var htmlPath = "/scores/htmlreports/20232024/ES02"
+var htmlPath = "/scores/htmlreports/20222023/ES02"
 var htmlEnd = ".HTM"
 var htmlString = ''
 //buildHTMLString(gameNumber)
@@ -54,16 +52,16 @@ var loopCounter = 0
 var gameNumberFromGamePk
 //'https://statsapi.web.nhl.com/api/v1/game/2021020382/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
-var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202302'
+var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202202'
 var NHLAPI_game_end = '/feed/live?site=en_nhl'
 var NHLAPI_game_URL
 //'Reports/HockeyReports/GameReports/Game0001.txt'
-var filepath = 'Reports/HockeyReports_20232024/GameReports/Game'
+var filepath = 'Reports/HockeyReports/GameReports/Game'
 var filetype = '.txt'
 var filetypeJSON = '.json'
 var LIBRARY_fpath
-var libraryFile = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.txt'
-var libraryFileJSON = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
+var libraryFile = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.txt'
+var libraryFileJSON = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.json'
 ////////////////
 
 /*
@@ -206,54 +204,7 @@ var teams_array = ['ANA', 'ARI', 'BOS', 'BUF', 'CGY', 'CAR', 'CHI', 'COL',
                     'SEA', 'STL', 'TBL', 'TOR', 'VAN', 'VGK', 'WSH', 'WPG',]
 
 //getSchedule()
-//getSchedule()
-
-var teamStatsLibrary = {}
-
-getTeamStats()
-
-async function getTeamStats() {
-    //const nhl_team_stats_url = `https://statsapi.web.nhl.com/api/v1/standings`
-    const nhl_team_stats_url = `https://statsapi.web.nhl.com/api/v1/standings?hydrate=record(overall),division,conference,team(nextSchedule(team),previousSchedule(team))&season=20232024&site=en_nhl`
-    const teamStatsFilePath = 'Reports/HockeyReports_20232024/GameReports/02_NHLTeamStats.json'
-    let response = await fetch(nhl_team_stats_url);
-    teamStatsData = await response.json();
-    console.log(teamStatsData)
-    for ([division,division_stats] in teamStatsData.records) {
-        //console.log(division, teamStatsData.records[division])
-        //console.log(division, teamStatsData.records[division].teamRecords)
-        var teamRecords = teamStatsData.records[division].teamRecords
-        for ([team, teamRecord] in teamRecords) {
-            console.log('----------------------------------------')
-            //console.log(teamRecords[team])
-            //console.log(teamRecords[team].team.abbreviation)
-            var team_abbreviation = teamRecords[team].team.abbreviation
-            const teamRecordObject = {
-                teamRecord_Name: teamRecords[team].team.abbreviation,
-                teamRecord_Wins: teamRecords[team].leagueRecord.wins,
-                teamRecord_Losses: teamRecords[team].leagueRecord.losses,
-                teamRecord_Overtimes: teamRecords[team].leagueRecord.ot,
-                teamRecord_RegulationWins: teamRecords[team].regulationWins,
-                teamRecord_GoalsFor: teamRecords[team].goalsScored,
-                teamRecord_GoalsAgainst: teamRecords[team].goalsAgainst,
-                teamRecord_Points: teamRecords[team].points,
-                teamRecord_GamesPlayed: teamRecords[team].gamesPlayed,
-                //teamRecord_Streak: teamRecords[team].streak.streakCode,
-                teamRecord_Streak: typeof(teamRecords[team].streak) === 'undefined' ? '-' : typeof(teamRecords[team].streak.streakCode),
-                teamRecord_Home: teamRecords[team].records.overallRecords[0],
-                teamRecord_Away: teamRecords[team].records.overallRecords[1],
-                teamRecord_Shootouts: teamRecords[team].records.overallRecords[2],
-                teamRecord_LastTen: teamRecords[team].records.overallRecords[3],
-            }
-            //console.log(teamRecordObject)
-            teamStatsLibrary[team_abbreviation] = teamRecordObject
-        }
-    }
-    console.log(teamStatsLibrary)
-    writeGameToFolder(teamStatsFilePath, JSON.stringify(teamStatsLibrary))
-}
-
-
+getSchedule()
 
 async function getSchedule() {
     // get our game summary data
@@ -290,7 +241,7 @@ function sortScheduleByTeam(jsonGameSummary){
                 //console.log(`found a game for ${hometeamabbrev}, ${awayteamabbrev} on ${gameplaydate}`)
                 gameInfo.hometeam = hometeamabbrev
                 gameInfo.awayteam = awayteamabbrev
-                //gameInfo.gamedate = gameplaydate
+                gameInfo.gamedate = gameplaydate
                 gameInfo.gamenumber = jsonGameSummary[summary].gameSummaryGameNumber
                 gameInfo.result = jsonGameSummary[summary].gameSummaryDetailedState
                 gameInfo.periodResult = jsonGameSummary[summary].gameSummaryPeriod   // 1 2 3 and 4 (OT) and 5 (SO)

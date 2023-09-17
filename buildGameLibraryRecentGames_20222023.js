@@ -11,12 +11,11 @@ console.log('javascript loaded')
 //useful links
 //https://www.hockey-reference.com/leagues/NHL_2021_games.html
 
-var maxGameNumber = 1312 //32 team * 41 home games = 1312 games
-//var maxGameNumber = 15  // for testing
+var maxGameNumber = 1312 //82 * 16(*2)   1312
+//var maxGameNumber = 1040 //82 * 16(*2)   1312
 //'https://www.nhl.com/scores/htmlreports/20212022/ES020001.HTM'
 var htmlBase = "http://www.nhl.com"
-//var htmlPath = "/scores/htmlreports/20222023/ES02"
-var htmlPath = "/scores/htmlreports/20232024/ES02"
+var htmlPath = "/scores/htmlreports/20222023/ES02"
 var htmlEnd = ".HTM"
 var htmlString = ''
 
@@ -33,13 +32,13 @@ var NHLAPI_game_end = '/feed/live?site=en_nhl'
 var NHLAPI_game_URL
 
 //'Reports/HockeyReports/GameReports/Game0001.txt'
-var filepath = 'Reports/HockeyReports_20232024/GameReports/Game'
-//var filetype = '.txt'
+var filepath = 'Reports/HockeyReports/GameReports/Game'
+var filetype = '.txt'
 var filetypeJSON = '.json'
 var LIBRARY_fpath
-//var libraryFile = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.txt'
-var libraryFileJSON = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
-//var libraryFileJSONTemp = 'Reports/HockeyReports/GameReports/00_GameSummaryLibraryTemp.json'
+var libraryFile = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.txt'
+var libraryFileJSON = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.json'
+var libraryFileJSONTemp = 'Reports/HockeyReports/GameReports/00_GameSummaryLibraryTemp.json'
 ////////////////
 
 //'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2022-01-12&endDate=2022-01-12'
@@ -168,16 +167,8 @@ async function getGameSummary(gameNumber) {
 async function getGameSummary_FromFolder(gameNumber) {
     //LIBRARY_fpath = buildFolderPath(gameNumber)
     NHLAPI_game_FilePath = buildGameFilePath(gameNumber)          // get file path address
-    //console.log(`NHLAPI_game_FilePath: ${NHLAPI_game_FilePath}`)
-    let gameData
-    if (fs.existsSync(NHLAPI_game_FilePath)) {
-        //console.log("file exists")
-        gameData = JSON.parse(fs.readFileSync(NHLAPI_game_FilePath))
-    } else {
-        //console.log("file does not exist")
-        gameData = await getGameSummary(i)
-    }
-    //let gameData = JSON.parse(fs.readFileSync(NHLAPI_game_FilePath))
+    console.log(`NHLAPI_game_FilePath: ${NHLAPI_game_FilePath}`)
+    let gameData = JSON.parse(fs.readFileSync(NHLAPI_game_FilePath))
     //console.log(`gameData from file: ${typeof(gameData)}`);
     //console.log(`2 gameData from file: ${gameData}`);
     //let response = await fetch(NHLAPI_game_FilePath);        // read it
@@ -198,7 +189,7 @@ function buildGameFilePath(gameNum) {
 
 ///////////////////////////////////////////////////////////
 
-// <<<<<<<------------------------    PROGRAM STARTS HERE --------------------------------- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 // EVERY DAY REBUILD THE LIBRARY
 buildLibrary()
 
@@ -226,7 +217,7 @@ async function buildLibrary() {
         }
     }
 
-    //console.log(`gameNumbers_to_get: ${gameNumbers_to_get}`)
+    console.log(`gameNumbers_to_get: ${gameNumbers_to_get}`)
     
     //write library file
     writeGameSummaryToFile(gameSummaryLibrary, libraryFileJSON)
@@ -271,11 +262,10 @@ function sortFunc(a, b) {
 async function getGameNumbers() {
     
     NHLAPI_schedule_URL = buildURL_ScheduleToGetGamesFrom()
-    console.log('nhlapi schedule url: ', NHLAPI_schedule_URL)
     let response = await fetch(NHLAPI_schedule_URL);
     gameData = await response.json();
     let game_nums = getGameNumbersFromGames(gameData)
-    console.log('game_nums: ', game_nums)
+    //console.log(game_nums)
     return game_nums
 }
 
