@@ -214,40 +214,48 @@ getTeamStats()
 
 async function getTeamStats() {
     //const nhl_team_stats_url = `https://statsapi.web.nhl.com/api/v1/standings`
-    const nhl_team_stats_url = `https://statsapi.web.nhl.com/api/v1/standings?hydrate=record(overall),division,conference,team(nextSchedule(team),previousSchedule(team))&season=20232024&site=en_nhl`
+    //const nhl_team_stats_url = `https://statsapi.web.nhl.com/api/v1/standings?hydrate=record(overall),division,conference,team(nextSchedule(team),previousSchedule(team))&season=20232024&site=en_nhl`
+    const nhl_team_stats_url = `https://api-web.nhle.com/v1/standings/now`
     const teamStatsFilePath = 'Reports/HockeyReports_20232024/GameReports/02_NHLTeamStats.json'
     let response = await fetch(nhl_team_stats_url);
     teamStatsData = await response.json();
-    console.log(teamStatsData)
-    for ([division,division_stats] in teamStatsData.records) {
+    //console.log(teamStatsData)
+    //for ([division,division_stats] in teamStatsData.records) {
+    for (teamRecord in teamStatsData.standings) {
         //console.log(division, teamStatsData.records[division])
-        //console.log(division, teamStatsData.records[division].teamRecords)
-        var teamRecords = teamStatsData.records[division].teamRecords
-        for ([team, teamRecord] in teamRecords) {
-            console.log('----------------------------------------')
-            //console.log(teamRecords[team])
-            //console.log(teamRecords[team].team.abbreviation)
-            var team_abbreviation = teamRecords[team].team.abbreviation
-            const teamRecordObject = {
-                teamRecord_Name: teamRecords[team].team.abbreviation,
-                teamRecord_Wins: teamRecords[team].leagueRecord.wins,
-                teamRecord_Losses: teamRecords[team].leagueRecord.losses,
-                teamRecord_Overtimes: teamRecords[team].leagueRecord.ot,
-                teamRecord_RegulationWins: teamRecords[team].regulationWins,
-                teamRecord_GoalsFor: teamRecords[team].goalsScored,
-                teamRecord_GoalsAgainst: teamRecords[team].goalsAgainst,
-                teamRecord_Points: teamRecords[team].points,
-                teamRecord_GamesPlayed: teamRecords[team].gamesPlayed,
-                //teamRecord_Streak: teamRecords[team].streak.streakCode,
-                teamRecord_Streak: typeof(teamRecords[team].streak) === 'undefined' ? '-' : typeof(teamRecords[team].streak.streakCode),
-                teamRecord_Home: teamRecords[team].records.overallRecords[0],
-                teamRecord_Away: teamRecords[team].records.overallRecords[1],
-                teamRecord_Shootouts: teamRecords[team].records.overallRecords[2],
-                teamRecord_LastTen: teamRecords[team].records.overallRecords[3],
-            }
-            //console.log(teamRecordObject)
-            teamStatsLibrary[team_abbreviation] = teamRecordObject
+        //console.log('----------------------------------------')
+        var teamRecord = teamStatsData.standings[teamRecord]
+        //console.log('team record: ', teamRecord)
+        //for ([team, teamRecord] in teamRecords) {
+    
+        //console.log(teamRecords[team])
+        //console.log(teamRecords[team].team.abbreviation)
+        var team_abbreviation = teamRecord.teamAbbrev.default
+        const teamRecordObject = {
+            teamRecord_Name: team_abbreviation,
+            teamRecord_Wins: teamRecord.wins,
+            teamRecord_Losses: teamRecord.losses,
+            teamRecord_Overtimes: teamRecord.otLosses,
+            teamRecord_RegulationWins: teamRecord.regulationWins,
+            teamRecord_GoalsFor: teamRecord.goalFor,
+            teamRecord_GoalsAgainst: teamRecord.goalAgainst,
+            teamRecord_Points: teamRecord.points,
+            teamRecord_GamesPlayed: teamRecord.gamesPlayed,
+            //teamRecord_Streak: teamRecords[team].streak.streakCode,
+            teamRecord_Streak: teamRecord.streakCode,
+            teamRecord_Home: teamRecord.homeWins + '-' + teamRecord.homeLosses + '-' + teamRecord.homeOtLosses,
+            teamRecord_Away: teamRecord.roadWins + '-' + teamRecord.roadLosses + '-' + teamRecord.roadOtLosses,
+            teamRecord_Shootouts: teamRecord.shootoutWins + '-' + teamRecord.shootoutLosses,
+            teamRecord_LastTen: teamRecord.l10Wins + '-' + teamRecord.l10Losses + '-' + teamRecord.l10OtLosses,
+            teamRecord_LastTenGoals: teamRecord.l10GoalsFor + '-' + teamRecord.l10GoalsAgainst,
+            teamRecord_2PtGamesPoints: (teamRecord.regulationPlusOtWins * 2) + teamRecord.shootoutLosses + teamRecord.shootoutWins,
+            teamRecord_2PtGamesRecord: teamRecord.regulationPlusOtWins + '-' + (teamRecord.otLosses + teamRecord.losses) + '-' + teamRecord.shootoutWins,
+            teamRecord_60minPoints: (teamRecord.regulationWins * 2) + (teamRecord.gamesPlayed - teamRecord.regulationWins - teamRecord.losses),
+            teamRecord_60minRecord: teamRecord.regulationWins + '-' + teamRecord.losses + '-' + (teamRecord.gamesPlayed - teamRecord.regulationWins - teamRecord.losses),
         }
+        //console.log(teamRecordObject)
+        teamStatsLibrary[team_abbreviation] = teamRecordObject
+        
     }
     console.log(teamStatsLibrary)
     writeGameToFolder(teamStatsFilePath, JSON.stringify(teamStatsLibrary))

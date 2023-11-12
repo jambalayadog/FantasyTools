@@ -23,4 +23,4 @@ call git commit -m "stats update"
 call git status
 call git push origin main
 call git status
-pause
+::pause

@@ -28,8 +28,9 @@ var folderPath
 //'https://statsapi.web.nhl.com/api/v1/game/2021020382/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2023020001/feed/live?site=en_nhl'
-var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202302'
-var NHLAPI_game_end = '/feed/live?site=en_nhl'
+//var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202302'
+var NHLAPI_game_base = 'https://api-web.nhle.com/v1/gamecenter/202302'
+var NHLAPI_game_end = '/boxscore'
 var NHLAPI_game_URL
 
 //'Reports/HockeyReports/GameReports/Game0001.txt'
@@ -47,6 +48,8 @@ var NHLAPI_schedule_start = 'https://statsapi.web.nhl.com/api/v1/schedule?startD
 var NHLAPI_schedule_end = '&endDate='
 var NHLAPI_schedule_URL
 var game_numbers = []
+
+var NHLAPI2023_schedule_URLStringStart = 'https://api-web.nhle.com/v1/schedule/'
 
 
 
@@ -66,30 +69,39 @@ function buildGameSummaryLibrary(gameSummaryData) {
     //console.log(gameSummaryData)
     //console.log(parsedJsonData)
     const summaryDate = new Date().toISOString().substring(0,19) + 'Z'
-    const [empty_netters, powerplay_goalsfor, powerplay_goalsagainst] = process_gameevents(parsedJsonData)
-    const parsedShort = parsedJsonData.liveData.boxscore.teams
+    //const [empty_netters, powerplay_goalsfor, powerplay_goalsagainst] = process_gameevents(parsedJsonData)
+    const [empty_netters, powerplay_goalsfor, powerplay_goalsagainst] = [0,0,0]
+    //console.log(`test data ${parsedJsonData.awayTeam.powerPlayConversion}`)
+    
+    //const parsedShort = parsedJsonData.liveData.boxscore.teams
     // vars because some values might be blank (NHL.com API problem)
     // I could add more checks here to ensure data is adequate
     // and report errors back about this - ASK PROGRAMMER BUDDY
-    const home_power_plays = parsedShort.home.teamStats.teamSkaterStats != undefined ? parsedShort.home.teamStats.teamSkaterStats.powerPlayOpportunities : 0
-    const away_power_plays = parsedShort.away.teamStats.teamSkaterStats != undefined ? parsedShort.away.teamStats.teamSkaterStats.powerPlayOpportunities : 0
-    const home_power_play_goals = parsedShort.home.teamStats.teamSkaterStats != undefined ? parsedShort.home.teamStats.teamSkaterStats.powerPlayGoals : 0
-    const away_power_play_goals = parsedShort.away.teamStats.teamSkaterStats != undefined ? parsedShort.away.teamStats.teamSkaterStats.powerPlayGoals : 0
+    //console.log(`test data ${parsedJsonData.awayTeam}`)
+    const home_power_plays = parsedJsonData.homeTeam.powerPlayConversion != undefined ? (parsedJsonData.homeTeam.powerPlayConversion).substring(2,2) : 0
+    const home_power_play_goals = parsedJsonData.homeTeam.powerPlayConversion != undefined ? (parsedJsonData.homeTeam.powerPlayConversion).substring(0,0) : 0
+    const away_power_plays = parsedJsonData.awayTeam.powerPlayConversion != undefined ? (parsedJsonData.awayTeam.powerPlayConversion).substring(2,2) : 0
+    const away_power_play_goals = parsedJsonData.awayTeam.powerPlayConversion != undefined ? (parsedJsonData.awayTeam.powerPlayConversion).substring(0,0) : 0
+    //const home_power_plays = parsedShort.home.teamStats.teamSkaterStats != undefined ? parsedShort.home.teamStats.teamSkaterStats.powerPlayOpportunities : 0
+    //const away_power_plays = parsedShort.away.teamStats.teamSkaterStats != undefined ? parsedShort.away.teamStats.teamSkaterStats.powerPlayOpportunities : 0
+    //const home_power_play_goals = parsedShort.home.teamStats.teamSkaterStats != undefined ? parsedShort.home.teamStats.teamSkaterStats.powerPlayGoals : 0
+    //const away_power_play_goals = parsedShort.away.teamStats.teamSkaterStats != undefined ? parsedShort.away.teamStats.teamSkaterStats.powerPlayGoals : 0
     // make the object
     const gameSummaryObject = {
-        gameSummaryDate: parsedJsonData.gameData.datetime.dateTime,
-        gameSummaryGameNumber: getGameNumberFromGamePk(parsedJsonData.gamePk),
-        gameSummaryDetailedState : parsedJsonData.gameData.status.detailedState,
-        gameSummaryHomeTeam: parsedJsonData.gameData.teams.home.name,
-        gameSummaryAwayTeam: parsedJsonData.gameData.teams.away.name,
-        gameSummaryHomeTeamShort: parsedJsonData.gameData.teams.home.abbreviation,
-        gameSummaryAwayTeamShort: parsedJsonData.gameData.teams.away.abbreviation,
-        gameSummaryHomeTeamID: parsedJsonData.gameData.teams.home.id,
-        gameSummaryAwayTeamID: parsedJsonData.gameData.teams.away.id,
-        gameSummaryHomeScore: parsedJsonData.liveData.linescore.teams.home.goals,
-        gameSummaryAwayScore: parsedJsonData.liveData.linescore.teams.away.goals,
-        gameSummaryHomeShots: parsedJsonData.liveData.linescore.teams.home.shotsOnGoal,
-        gameSummaryAwayShots: parsedJsonData.liveData.linescore.teams.away.shotsOnGoal,
+        //gameSummaryDate: parsedJsonData.gameData.datetime.dateTime,
+        gameSummaryDate: parsedJsonData.startTimeUTC,
+        gameSummaryGameNumber: getGameNumberFromGamePk(parsedJsonData.id),
+        gameSummaryDetailedState : parsedJsonData.gameState,
+        gameSummaryHomeTeam: parsedJsonData.homeTeam.name.default,
+        gameSummaryAwayTeam: parsedJsonData.awayTeam.name.default,
+        gameSummaryHomeTeamShort: parsedJsonData.homeTeam.abbrev,
+        gameSummaryAwayTeamShort: parsedJsonData.awayTeam.abbrev,
+        gameSummaryHomeTeamID: parsedJsonData.homeTeam.id,
+        gameSummaryAwayTeamID: parsedJsonData.awayTeam.id,
+        gameSummaryHomeScore: parsedJsonData.homeTeam.score,
+        gameSummaryAwayScore: parsedJsonData.awayTeam.score,
+        gameSummaryHomeShots: parsedJsonData.homeTeam.sog,
+        gameSummaryAwayShots: parsedJsonData.awayTeam.sog,
         /*gameSummaryHomePowerPlays: parsedJsonData.liveData.boxscore.teams.home.teamStats.teamSkaterStats.powerPlayOpportunities,
         gameSummaryAwayPowerPlays: parsedJsonData.liveData.boxscore.teams.away.teamStats.teamSkaterStats.powerPlayOpportunities,
         gameSummaryHomePowerPlayGoals: parsedJsonData.liveData.boxscore.teams.home.teamStats.teamSkaterStats.powerPlayGoals,
@@ -98,14 +110,14 @@ function buildGameSummaryLibrary(gameSummaryData) {
         gameSummaryAwayPowerPlays: away_power_plays,
         gameSummaryHomePowerPlayGoals: home_power_play_goals,
         gameSummaryAwayPowerPlayGoals: away_power_play_goals,
-        gameSummaryAPILink: parsedJsonData.link,
-        gameSummaryNHLStatsPage: buildHTMLString(getGameNumberFromGamePk(parsedJsonData.gamePk)),
-        gameSummaryStatus: parsedJsonData.gameData.status.detailedState,
+        gameSummaryAPILink: typeof(parsedJsonData.boxscore) === 'undefined' ? '-' : parsedJsonData.boxscore.gameReports.eventSummary,
+        gameSummaryNHLStatsPage: buildHTMLString(getGameNumberFromGamePk(parsedJsonData.id)),
+        gameSummaryStatus: parsedJsonData.gameState,
         gameSummaryLastUpdated: summaryDate,
-        gameSummaryPeriod: parsedJsonData.liveData.linescore.currentPeriodOrdinal,
-        gameSummaryPeriodRemaining: parsedJsonData.liveData.linescore.currentPeriodTimeRemaining,
-        gameSummaryWinningGoalie: typeof(parsedJsonData.liveData.decisions.winner) === 'undefined' ? '-' : parsedJsonData.liveData.decisions.winner.id,
-        gameSummaryLosingGoalie: typeof(parsedJsonData.liveData.decisions.loser) === 'undefined' ? '-' : parsedJsonData.liveData.decisions.loser.id,
+        gameSummaryPeriod: typeof(parsedJsonData.period) === 'undefined' ? '-' : parsedJsonData.period,
+        gameSummaryPeriodRemaining: parsedJsonData.clock.timeRemaining,
+        //gameSummaryWinningGoalie: typeof(parsedJsonData.boxscore) === 'undefined' ? '-' : parsedJsonData.liveData.decisions.winner.id,
+        //gameSummaryLosingGoalie: typeof(parsedJsonData.boxscore) === 'undefined' ? '-' : parsedJsonData.liveData.decisions.loser.id,
         gameSummaryEmptyNetGoals: empty_netters,
     }
     //console.log('gameSummaryObject: ', gameSummaryObject)
@@ -131,6 +143,25 @@ function process_gameevents(parsedJsonData) {
 }
 
 
+////////////////////////////////////////
+//  2023-2034 NEW API
+///////////////////////////////////////
+
+function checkGameSummaryIsOld(gameSummary) {
+    summaryOld = false
+    parsedJsonData = typeof(gameSummary) === 'string' ? JSON.parse(gameSummary) : gameSummary
+    if (parsedJsonData.liveData != undefined) {
+        //console.log('summary is old: ', parsedJsonData.liveData)
+        summaryOld = true
+    }
+    //console.log('summaryOld: ', summaryOld)
+    return summaryOld
+}
+
+//////////////////////////////////////////
+
+
+
 function countEmptyNetGoals(parsedJsonData) {
     for (play in parsedJsonData.liveData.plays.allPlays) {
         console.log(parsedJsonData.liveData.plays.allPlays[play])
@@ -150,7 +181,7 @@ function writeGameSummaryToFile(gameLibrary, fileToUse) {
 }
 
 function getGameNumberFromGamePk(gamePk) {
-    gameNum = gamePk - 2022020000
+    gameNum = gamePk - 2023020000
     return gameNum
 }
 
@@ -214,13 +245,18 @@ async function buildLibrary() {
     for (i = 1; i <= maxGameNumber; i++) {
         //console.log(`index: ${i}, ${gameNumbers_to_get.indexOf(stringifyGameNumber(i))}`)
         if (gameNumbers_to_get.indexOf(stringifyGameNumber(i)) >= 0) {
-            console.log(`game within a few days of today: ${i}`)
+            //console.log(`game within a few days of today: ${i}`)
+            console.log(`game is listed to check: ${stringifyGameNumber(i)}`)
             let gameSummary = await getGameSummary(i)
             //console.log(`web - gameSummary: ${i}, ${gameSummary}, ${i}`)
             gameSummaryLibrary.push(buildGameSummaryLibrary(gameSummary))
         } else {
-            //console.log(`game out of range: ${i}`)
+            console.log(`game out of range: ${i}`)
             let gameSummary = await getGameSummary_FromFolder(i)
+            if (checkGameSummaryIsOld(gameSummary)) {
+                //console.log(`- and old: ${i}`)
+                gameSummary = await getGameSummary(i)
+            }
             //console.log(`file - gameSummary: ${i}, ${gameSummary}, ${i}`)
             gameSummaryLibrary.push(buildGameSummaryLibrary(gameSummary))
         }
@@ -286,18 +322,33 @@ function buildURL_ScheduleToGetGamesFrom() {
     console.log('Time PST: ', todaysScheduleDateEST)
     one_week_ahead = new Date(todaysScheduleDateEST.getTime() + (3 * 24 * 60 * 60 * 1000))
     one_week_behind = new Date(todaysScheduleDateEST.getTime() - (3 * 24 * 60 * 60 * 1000))
+    three_days_behind = new Date(todaysScheduleDateEST.getTime() - (3 * 24 * 60 * 60 * 1000))
     todaysScheduleDate = todaysScheduleDateEST.toISOString().substring(0,10);
     one_week_ahead_string = one_week_ahead.toISOString().substring(0,10);
     one_week_behind_string = one_week_behind.toISOString().substring(0,10);
-    return NHLAPI_schedule_start + one_week_behind_string + NHLAPI_schedule_end + one_week_ahead_string
+    three_days_behind_string = three_days_behind.toISOString().substring(0,10);
+    //return NHLAPI_schedule_start + one_week_behind_string + NHLAPI_schedule_end + one_week_ahead_string
+    //console.log("OLD: NHLAPI_schedule_start + one_week_behind_string + NHLAPI_schedule_end + one_week_ahead_string")
+    return NHLAPI2023_schedule_URLStringStart + three_days_behind_string
 }
 
 
 function getGameNumbersFromGames(GamesJSON) {
     var game_numbers_in_range = []
     //console.log(GamesJSON)
-    //console.log('games: ', GamesJSON.dates[0].games)
-    for (var date in GamesJSON.dates) {
+    //console.log('games: ', GamesJSON.gameWeek)
+    for (var date in GamesJSON.gameWeek) {
+        //console.log('--0: ', GamesJSON.gameWeek)
+        //console.log('--1: ', GamesJSON.gameWeek[0].games)
+        //console.log('--2: ', date)
+        for (var game in GamesJSON.gameWeek[date].games) {
+            //console.log('Game: ', GamesJSON.gameWeek[0].games[game].id)
+            gameNumberFromGameId = GamesJSON.gameWeek[date].games[game].id
+            gameNumberFromGameId = (gameNumberFromGameId).toString().substring(6,10)
+            game_numbers_in_range.push(gameNumberFromGameId)
+        }
+    }
+    /*for (var date in GamesJSON.dates) {
         //console.log(GamesJSON.dates[date], date)
         for (var game in GamesJSON.dates[date].games) {
             //console.log('Game: ', game, ' -----', GamesJSON.dates[0].games[game])
@@ -305,7 +356,7 @@ function getGameNumbersFromGames(GamesJSON) {
             gameNumberFromGamePk = (gameNumberFromGamePk).toString().substring(6,10)
             game_numbers_in_range.push(gameNumberFromGamePk)
         }
-    }
+    }*/
     
     //console.log('todays games: ', game_numbers)
     return game_numbers_in_range
