@@ -24,6 +24,14 @@ var htmlString = ''
 var gameSummaryLibrary = []
 var folderPath
 
+//
+// https://gitlab.com/dword4/nhlapi/-/blob/master/new-api.md
+// API documentation
+//
+// may be useful to investigate
+// https://api-web.nhle.com/v1/gamecenter/2023020001/play-by-play
+//
+
 //'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2022-01-12&endDate=2022-01-12'
 //'https://statsapi.web.nhl.com/api/v1/game/2021020382/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
@@ -91,7 +99,8 @@ function buildGameSummaryLibrary(gameSummaryData) {
         //gameSummaryDate: parsedJsonData.gameData.datetime.dateTime,
         gameSummaryDate: parsedJsonData.startTimeUTC,
         gameSummaryGameNumber: getGameNumberFromGamePk(parsedJsonData.id),
-        gameSummaryDetailedState : parsedJsonData.gameState,
+        //gameSummaryDetailedState : parsedJsonData.gameState,
+        gameSummaryDetailedState : typeof(parsedJsonData.gameOutcome) === 'undefined' ? parsedJsonData.gameState : 'Final',
         gameSummaryHomeTeam: parsedJsonData.homeTeam.name.default,
         gameSummaryAwayTeam: parsedJsonData.awayTeam.name.default,
         gameSummaryHomeTeamShort: parsedJsonData.homeTeam.abbrev,
@@ -114,7 +123,8 @@ function buildGameSummaryLibrary(gameSummaryData) {
         gameSummaryNHLStatsPage: buildHTMLString(getGameNumberFromGamePk(parsedJsonData.id)),
         gameSummaryStatus: parsedJsonData.gameState,
         gameSummaryLastUpdated: summaryDate,
-        gameSummaryPeriod: typeof(parsedJsonData.period) === 'undefined' ? '-' : parsedJsonData.period,
+        //gameSummaryPeriod: typeof(parsedJsonData.period) === 'undefined' ? '-' : parsedJsonData.period,
+        gameSummaryPeriod: typeof(parsedJsonData.periodDescriptor) === 'undefined' ? '-' : parsedJsonData.periodDescriptor.periodType,
         gameSummaryPeriodRemaining: parsedJsonData.clock.timeRemaining,
         //gameSummaryWinningGoalie: typeof(parsedJsonData.boxscore) === 'undefined' ? '-' : parsedJsonData.liveData.decisions.winner.id,
         //gameSummaryLosingGoalie: typeof(parsedJsonData.boxscore) === 'undefined' ? '-' : parsedJsonData.liveData.decisions.loser.id,
