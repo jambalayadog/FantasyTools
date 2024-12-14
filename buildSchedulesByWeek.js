@@ -26,7 +26,7 @@ var gameNumber = 0
 var maxGameNumber = 18 //82 * 16(*2)   1312
 //'https://www.nhl.com/scores/htmlreports/20212022/ES020001.HTM'
 var htmlBase = "http://www.nhl.com"
-var htmlPath = "/scores/htmlreports/20232024/ES02"
+var htmlPath = "/scores/htmlreports/20242025/ES02"
 var htmlEnd = ".HTM"
 var htmlString = ''
 //buildHTMLString(gameNumber)
@@ -45,16 +45,16 @@ var todaysScheduleDate
 var gameNumberFromGamePk
 //'https://statsapi.web.nhl.com/api/v1/game/2021020382/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
-var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202302'
+var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202402'
 var NHLAPI_game_end = '/feed/live?site=en_nhl'
 var NHLAPI_game_URL
 //'Reports/HockeyReports/GameReports/Game0001.txt'
-var filepath = 'Reports/HockeyReports_20232024/GameReports/Game'
+var filepath = 'Reports/HockeyReports_20242025/GameReports/Game'
 var filetype = '.txt'
 var filetypeJSON = '.json'
 var LIBRARY_fpath
-var libraryFile = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.txt'
-var libraryFileJSON = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
+var libraryFile = 'Reports/HockeyReports_20242025/GameReports/00_GameSummaryLibrary.txt'
+var libraryFileJSON = 'Reports/HockeyReports_20242025/GameReports/00_GameSummaryLibrary.json'
 ////////////////
 
 
@@ -97,15 +97,15 @@ function buildGameURL(gameNum) {
 
 
 
-const season_start_date = new Date("2022-10-01")
-const season_end_date = new Date("2024-04-18")
+const season_start_date = new Date("2024-10-01")
+const season_end_date = new Date("2025-04-18")
 const first_monday_date = new Date("2022-10-03")
 const todays_date = new Date()
 const number_of_teams = 32
 const ms_in_a_day = 86400000
 //const days = (season_start_date - season_end_date) / ms_in_a_day
 const days = 12
-var first_monday = new Date("2023-10-02T00:00:00")
+var first_monday = new Date("2024-09-30T00:00:00")
 var current_week = Math.trunc((todays_date - first_monday) / (7 * ms_in_a_day))
 var total_weeks = Math.trunc((season_end_date - first_monday) / (7 * ms_in_a_day))
 console.log(`current week: ${current_week}`)
@@ -113,18 +113,18 @@ console.log(`total_weeks: ${total_weeks}`)
 //console.log(`days long: ${days}, ${season_start_date}`)
 
 
-var teams_array = ['ANA', 'ARI', 'BOS', 'BUF', 'CGY', 'CAR', 'CHI', 'COL',
-                    'CBJ', 'DAL', 'DET', 'EDM', 'FLA', 'LAK', 'MIN', 'MTL',
-                    'NSH', 'NJD', 'NYI', 'NYR', 'OTT', 'PHI', 'PIT', 'SJS',
-                    'SEA', 'STL', 'TBL', 'TOR', 'VAN', 'VGK', 'WSH', 'WPG',]
+var teams_array = ['ANA', 'BOS', 'BUF', 'CGY', 'CAR', 'CHI', 'COL', 'CBJ', 
+                    'DAL', 'DET', 'EDM', 'FLA', 'LAK', 'MIN', 'MTL', 'NSH', 
+                    'NJD', 'NYI', 'NYR', 'OTT', 'PHI', 'PIT', 'SJS', 'SEA', 
+                    'STL', 'TBL', 'TOR', 'UTA', 'VAN', 'VGK', 'WSH', 'WPG',]
 
 
 buildWeeklySchedules()
 
 async function buildWeeklySchedules() {
-    const gameSummaryFilePath = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
-    const scheduleFilePath = 'Reports/HockeyReports_20232024/GameReports/01_NHLScheduleByTeam.json'
-    const weeklySchedulesFilePath = 'Reports/HockeyReports_20232024/GameReports/03_NHLWeeklySchedules.json'
+    const gameSummaryFilePath = 'Reports/HockeyReports_20242025/GameReports/00_GameSummaryLibrary.json'
+    const scheduleFilePath = 'Reports/HockeyReports_20242025/GameReports/01_NHLScheduleByTeam.json'
+    const weeklySchedulesFilePath = 'Reports/HockeyReports_20242025/GameReports/03_NHLWeeklySchedules.json'
     let scheduleSummary = await readLibraryFile(scheduleFilePath)
     JSONScheduleSummary = JSON.parse(scheduleSummary)
     //console.log('weekly schedules: ')

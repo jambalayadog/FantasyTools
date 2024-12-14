@@ -29,7 +29,7 @@ var gameNumber = 0
 var maxGameNumber = 18 //82 * 16(*2)   1312
 //'https://www.nhl.com/scores/htmlreports/20212022/ES020001.HTM'
 var htmlBase = "http://www.nhl.com"
-var htmlPath = "/scores/htmlreports/20232024/ES02"
+var htmlPath = "/scores/htmlreports/20242025/ES02"
 var htmlEnd = ".HTM"
 var htmlString = ''
 //buildHTMLString(gameNumber)
@@ -54,16 +54,16 @@ var loopCounter = 0
 var gameNumberFromGamePk
 //'https://statsapi.web.nhl.com/api/v1/game/2021020382/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
-var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202302'
+var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202402'
 var NHLAPI_game_end = '/feed/live?site=en_nhl'
 var NHLAPI_game_URL
 //'Reports/HockeyReports/GameReports/Game0001.txt'
-var filepath = 'Reports/HockeyReports_20232024/GameReports/Game'
+var filepath = 'Reports/HockeyReports_20242025/GameReports/Game'
 var filetype = '.txt'
 var filetypeJSON = '.json'
 var LIBRARY_fpath
-var libraryFile = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.txt'
-var libraryFileJSON = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
+var libraryFile = 'Reports/HockeyReports_20242025/GameReports/00_GameSummaryLibrary.txt'
+var libraryFileJSON = 'Reports/HockeyReports_20242025/GameReports/00_GameSummaryLibrary.json'
 ////////////////
 
 /*
@@ -115,7 +115,7 @@ function writeGameSummaryToFile(gameLibrary, fileToUse) {
 }
 
 function getGameNumberFromGamePk(gamePk) {
-    gameNum = gamePk - 2022020000
+    gameNum = gamePk - 2024020000
     return gameNum
 }
 
@@ -187,7 +187,7 @@ async function buildLibrary() {
     writeGameSummaryToFile(gameSummaryLibrary, libraryFileJSON)
 }
 
-const season_start_date = new Date("2022-10-01")
+const season_start_date = new Date("2024-10-01")
 const season_end_date = new Date("2022-04-13")
 const first_monday_date = new Date("2022-10-03")
 const todays_date = new Date()
@@ -216,7 +216,7 @@ async function getTeamStats() {
     //const nhl_team_stats_url = `https://statsapi.web.nhl.com/api/v1/standings`
     //const nhl_team_stats_url = `https://statsapi.web.nhl.com/api/v1/standings?hydrate=record(overall),division,conference,team(nextSchedule(team),previousSchedule(team))&season=20232024&site=en_nhl`
     const nhl_team_stats_url = `https://api-web.nhle.com/v1/standings/now`
-    const teamStatsFilePath = 'Reports/HockeyReports_20232024/GameReports/02_NHLTeamStats.json'
+    const teamStatsFilePath = 'Reports/HockeyReports_20242025/GameReports/02_NHLTeamStats.json'
     let response = await fetch(nhl_team_stats_url);
     teamStatsData = await response.json();
     //console.log(teamStatsData)
@@ -371,7 +371,7 @@ function sortGamesByDay(jsonGameSummary) {
 
 
 async function getGameSchedule() {
-    const NHLSchedule_URL = 'https://www.hockey-reference.com/leagues/NHL_2023_games.html'
+    const NHLSchedule_URL = 'https://www.hockey-reference.com/leagues/NHL_2024_games.html'
     let response = await fetch(NHLSchedule_URL);
     //rawSchedule = await response.json();
     rawSchedule = await response.text()

@@ -2,10 +2,10 @@ set source_location=I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports\
 set target_location=I:\Projects\FantasyTools\FantasyTools\fantasytoolsapp
 
 ::robocopy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports\GameReports I:\Projects\FantasyTools\FantasyTools\fantasytoolsapp\files
-copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20232024\GameReports\00_GameSummaryLibrary.json I:\Projects\fantasytoolsapp\files\
-copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20232024\GameReports\01_NHLScheduleByTeam.json I:\Projects\fantasytoolsapp\files\
-copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20232024\GameReports\02_NHLTeamStats.json I:\Projects\fantasytoolsapp\files\
-copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20232024\GameReports\03_NHLWeeklySchedules.json I:\Projects\fantasytoolsapp\files\
+copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20242025\GameReports\00_GameSummaryLibrary.json I:\Projects\fantasytoolsapp\files\
+copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20242025\GameReports\01_NHLScheduleByTeam.json I:\Projects\fantasytoolsapp\files\
+copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20242025\GameReports\02_NHLTeamStats.json I:\Projects\fantasytoolsapp\files\
+copy I:\Projects\FantasyTools\FantasyTools\Reports\HockeyReports_20242025\GameReports\03_NHLWeeklySchedules.json I:\Projects\fantasytoolsapp\files\
 ::
 ::copy I:\Projects\FantasyTools\FantasyTools\fantasytoolsapp\files\00_GameSummaryLibrary.json I:\Projects\fantasytoolsapp\files\
 ::copy I:\Projects\FantasyTools\FantasyTools\fantasytoolsapp\files\01_NHLScheduleByTeam.json I:\Projects\fantasytoolsapp\files\

@@ -16,12 +16,14 @@ var maxGameNumber = 1312 //32 team * 41 home games = 1312 games
 //'https://www.nhl.com/scores/htmlreports/20212022/ES020001.HTM'
 var htmlBase = "http://www.nhl.com"
 //var htmlPath = "/scores/htmlreports/20222023/ES02"
-var htmlPath = "/scores/htmlreports/20232024/ES02"
+var htmlPath = "/scores/htmlreports/20242025/ES02"
 var htmlEnd = ".HTM"
 var htmlString = ''
 
 // library
 var gameSummaryLibrary = []
+var inRange = []
+var outOfRange = []
 var folderPath
 
 //
@@ -37,17 +39,17 @@ var folderPath
 //'https://statsapi.web.nhl.com/api/v1/game/2022020001/feed/live?site=en_nhl'
 //'https://statsapi.web.nhl.com/api/v1/game/2023020001/feed/live?site=en_nhl'
 //var NHLAPI_game_base = 'https://statsapi.web.nhl.com/api/v1/game/202302'
-var NHLAPI_game_base = 'https://api-web.nhle.com/v1/gamecenter/202302'
+var NHLAPI_game_base = 'https://api-web.nhle.com/v1/gamecenter/202402'
 var NHLAPI_game_end = '/boxscore'
 var NHLAPI_game_URL
 
 //'Reports/HockeyReports/GameReports/Game0001.txt'
-var filepath = 'Reports/HockeyReports_20232024/GameReports/Game'
+var filepath = 'Reports/HockeyReports_20242025/GameReports/Game'
 //var filetype = '.txt'
 var filetypeJSON = '.json'
 var LIBRARY_fpath
 //var libraryFile = 'Reports/HockeyReports/GameReports/00_GameSummaryLibrary.txt'
-var libraryFileJSON = 'Reports/HockeyReports_20232024/GameReports/00_GameSummaryLibrary.json'
+var libraryFileJSON = 'Reports/HockeyReports_20242025/GameReports/00_GameSummaryLibrary.json'
 //var libraryFileJSONTemp = 'Reports/HockeyReports/GameReports/00_GameSummaryLibraryTemp.json'
 ////////////////
 
@@ -101,8 +103,10 @@ function buildGameSummaryLibrary(gameSummaryData) {
         gameSummaryGameNumber: getGameNumberFromGamePk(parsedJsonData.id),
         //gameSummaryDetailedState : parsedJsonData.gameState,
         gameSummaryDetailedState : typeof(parsedJsonData.gameOutcome) === 'undefined' ? parsedJsonData.gameState : 'Final',
-        gameSummaryHomeTeam: parsedJsonData.homeTeam.name.default,
-        gameSummaryAwayTeam: parsedJsonData.awayTeam.name.default,
+        gameSummaryHomeTeam: typeof(parsedJsonData.homeTeam.commonName) === 'undefined' ? parsedJsonData.homeTeam.name.default : parsedJsonData.homeTeam.commonName.default,
+        gameSummaryHomeTeam: typeof(parsedJsonData.awayTeam.commonName) === 'undefined' ? parsedJsonData.awayTeam.name.default : parsedJsonData.awayTeam.commonName.default,
+        //gameSummaryHomeTeam: parsedJsonData.homeTeam.commonName.default,
+        //gameSummaryAwayTeam: parsedJsonData.awayTeam.commonName.default,
         gameSummaryHomeTeamShort: parsedJsonData.homeTeam.abbrev,
         gameSummaryAwayTeamShort: parsedJsonData.awayTeam.abbrev,
         gameSummaryHomeTeamID: parsedJsonData.homeTeam.id,
@@ -191,7 +195,7 @@ function writeGameSummaryToFile(gameLibrary, fileToUse) {
 }
 
 function getGameNumberFromGamePk(gamePk) {
-    gameNum = gamePk - 2023020000
+    gameNum = gamePk - 2024020000
     return gameNum
 }
 
@@ -249,19 +253,22 @@ async function buildLibrary() {
     
     // get relevant game numbers (within some days of today's date)
     let gameNumbers_to_get = await getGameNumbers()
-    //console.log(`gameNumbers_to_get: ${gameNumbers_to_get}`)
-    
+    console.log(`gameNumbers_to_get: ${gameNumbers_to_get}`)
+    outOfRange = []
     // go through all the year's games
     for (i = 1; i <= maxGameNumber; i++) {
+        console.log(`index: ${i}, ${stringifyGameNumber(i)}, ${gameNumbers_to_get.indexOf(stringifyGameNumber(i))}`)
         //console.log(`index: ${i}, ${gameNumbers_to_get.indexOf(stringifyGameNumber(i))}`)
         if (gameNumbers_to_get.indexOf(stringifyGameNumber(i)) >= 0) {
             //console.log(`game within a few days of today: ${i}`)
-            console.log(`game is listed to check: ${stringifyGameNumber(i)}`)
+            //console.log(`game is listed to check: ${stringifyGameNumber(i)}`)
+            inRange.push(i)
             let gameSummary = await getGameSummary(i)
             //console.log(`web - gameSummary: ${i}, ${gameSummary}, ${i}`)
             gameSummaryLibrary.push(buildGameSummaryLibrary(gameSummary))
         } else {
             console.log(`game out of range: ${i}`)
+            outOfRange.push(i)
             let gameSummary = await getGameSummary_FromFolder(i)
             if (checkGameSummaryIsOld(gameSummary)) {
                 //console.log(`- and old: ${i}`)
@@ -271,7 +278,8 @@ async function buildLibrary() {
             gameSummaryLibrary.push(buildGameSummaryLibrary(gameSummary))
         }
     }
-
+    console.log('games in range: ', inRange)
+    console.log('games out of range: ', outOfRange)
     //console.log(`gameNumbers_to_get: ${gameNumbers_to_get}`)
     
     //write library file
